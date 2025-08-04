@@ -1,0 +1,136 @@
+
+<head>
+
+    <title>Greenperth Global Industries</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .banner {
+            background: linear-gradient(135deg, #116517, #146a1e);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(13, 99, 6, 0.5);
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 16.67%; /* Half of original 33.33% = 16.67% */
+            margin-bottom: 40px;
+        }
+        
+        .banner-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px; /* Reduced from 20px */
+            text-align: center;
+        }
+        
+        .feather-container {
+            position: relative;
+            width: 90px; /* Reduced from 180px */
+            height: 90px; /* Reduced from 180px */
+            margin-bottom: 3px; /* Reduced from 5px */
+            animation: float 5s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .feather-image {
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7));
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        .company-name {
+            font-size: 2rem; /* Reduced from 2rem */
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2.5px; /* Reduced from 3px */
+            color: #d2b928;
+            margin-top: 1px; /* Reduced from 5px */
+        }
+        
+        .tagline {
+            font-size: 1rem; /* Reduced from 1.2rem */
+            font-weight: 300;
+            letter-spacing: 2px; /* Reduced from 2px */
+            margin-top:1px; /* Reduced from 5px */
+            max-width: 300px; /* Reduced from 600px */
+            color: #e9c234;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); } /* Reduced from -15px */
+        }
+        
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+            100% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)); }
+        }
+        
+        @media (max-width: 768px) {
+            .banner {
+                padding-bottom: 25%; /* Half of original 50% = 25% */
+            }
+            
+            .feather-container {
+                width: 65px; /* Half of original 130px */
+                height: 65px; /* Half of original 130px */
+            }
+            
+            .company-name {
+                font-size: 0.9rem; /* Half of original 1.8rem */
+            }
+            
+            .tagline {
+                font-size: 0.9rem; /* Half of original 1rem */
+            }
+            
+            .feature {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .company-name {
+                font-size: 0.75rem; /* Half of original 1.5rem */
+                letter-spacing: 1px; /* Half of original 2px */
+            }
+            
+            .tagline {
+                font-size: 0.45rem; /* Half of original 0.9rem */
+            }
+            
+            .feather-container {
+                width: 50px; /* Half of original 100px */
+                height: 50px; /* Half of original 100px */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="banner">
+            <div class="banner-content">
+                <div class="feather-container">
+                    <img src="peacockfeather.png" alt="Peacock Feather" class="feather-image">
+                </div>
+                <h1 class="company-name">Green Perth Global Industries</h1>
+                <p class="tagline">Creating captivating Caring</p>
+
