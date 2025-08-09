@@ -10,16 +10,23 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        .container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 16.67%;
+            margin-bottom: 40px;
+        }
+        
         .banner {
             background: linear-gradient(135deg, #116517, #146a1e);
             border-radius: 15px;
             box-shadow: 0 15px 30px rgba(13, 99, 6, 0.5);
             overflow: hidden;
-            position: relative;
+            position: absolute;
+            inset: 0;
             width: 100%;
-            height: 0;
-            padding-bottom: 16.67%; /* Half of original 33.33% = 16.67% */
-            margin-bottom: 40px;
+            height: 100%;
         }
         
         .banner-content {
@@ -83,7 +90,7 @@
         }
         
         @media (max-width: 768px) {
-            .banner {
+            .container {
                 padding-bottom: 25%; /* Half of original 50% = 25% */
             }
             
@@ -132,6 +139,11 @@
                 </div>
                 <h1 class="company-name">Greenperth Global Industries</h1>
                 <p class="tagline">Creating captivating Caring</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 
 
 
