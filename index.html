@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -468,6 +469,11 @@
                                     <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
                                     <textarea id="message" rows="5" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
                                 </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                                    <button type="button" id="send-whatsapp" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition"><i class="fab fa-whatsapp mr-2"></i>Send on WhatsApp</button>
+                                    <button type="button" id="send-sms" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"><i class="fas fa-sms mr-2"></i>Send as SMS</button>
+                                    <button type="button" id="send-email" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition"><i class="fas fa-envelope mr-2"></i>Send via Email</button>
+                                </div>
                                 <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-secondary transition">Send Message</button>
                             </form>
                         </div>
@@ -488,7 +494,7 @@
                             <a href="#" class="text-white hover:text-accent transition"><i class="fab fa-twitter"></i></a>
                             <a href="#" class="text-white hover:text-accent transition"><i class="fab fa-instagram"></i></a>
                             <a href="#" class="text-white hover:text-accent transition"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="text-white hover:text-accent transition"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://wa.me/918279710995" target="_blank" rel="noopener" class="text-white hover:text-accent transition"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                     <div>
@@ -1039,13 +1045,127 @@
             });
         });
 
+        // Helpers for WhatsApp and SMS deep links
+        function buildPrefilledMessage() {
+            const name = document.getElementById('name')?.value?.trim() || '';
+            const email = document.getElementById('email')?.value?.trim() || '';
+            const phone = document.getElementById('phone')?.value?.trim() || '';
+            const subject = document.getElementById('subject')?.value || '';
+            const subjectLabel = {
+                '': 'General',
+                product: 'Product Inquiry',
+                order: 'Order Inquiry',
+                partnership: 'Partnership',
+                other: 'Other'
+            }[subject] || 'General';
+            const message = document.getElementById('message')?.value?.trim() || '';
+            const composed = `Inquiry Type: ${subjectLabel}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`;
+            return encodeURIComponent(composed);
+        }
+
+        function openWhatsApp() {
+            const prefill = buildPrefilledMessage();
+            const phoneE164 = '918279710995'; // +91 8279710995
+            const waUrl = `https://wa.me/${phoneE164}?text=${prefill}`;
+            window.open(waUrl, '_blank');
+        }
+
+        function openSMS() {
+            const prefill = buildPrefilledMessage();
+            const smsNumber = '+918279710995';
+            const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const smsUrl = isApple ? `sms:${smsNumber}&body=${prefill}` : `sms:${smsNumber}?body=${prefill}`;
+            window.location.href = smsUrl;
+        }
+
+        async function sendEmailViaFormBackend() {
+            const name = document.getElementById('name')?.value?.trim() || '';
+            const email = document.getElementById('email')?.value?.trim() || '';
+            const phone = document.getElementById('phone')?.value?.trim() || '';
+            const subjectValue = document.getElementById('subject')?.value || '';
+            const subjectLabel = {
+                '': 'General',
+                product: 'Product Inquiry',
+                order: 'Order Inquiry',
+                partnership: 'Partnership',
+                other: 'Other'
+            }[subjectValue] || 'General';
+            const message = document.getElementById('message')?.value?.trim() || '';
+
+            const payload = {
+                name,
+                email,
+                phone,
+                subject: subjectLabel,
+                message,
+                _subject: `[Website] ${subjectLabel} Inquiry`,
+                _template: 'table',
+                _captcha: 'false'
+            };
+
+            try {
+                const response = await fetch('https://formsubmit.co/ajax/greenperth.corporation@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                return result && result.success;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        function openEmail() {
+            const subjectField = document.getElementById('subject')?.value || '';
+            const subjectLabel = {
+                '': 'General',
+                product: 'Product Inquiry',
+                order: 'Order Inquiry',
+                partnership: 'Partnership',
+                other: 'Other'
+            }[subjectField] || 'General';
+            const body = decodeURIComponent(buildPrefilledMessage());
+            const mailto = `mailto:greenperth.corporation@gmail.com?subject=${encodeURIComponent('[Website] ' + subjectLabel)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        }
+
+        // Wire up click handlers
+        const waBtn = document.getElementById('send-whatsapp');
+        if (waBtn) {
+            waBtn.addEventListener('click', function() {
+                openWhatsApp();
+            });
+        }
+        const smsBtn = document.getElementById('send-sms');
+        if (smsBtn) {
+            smsBtn.addEventListener('click', function() {
+                openSMS();
+            });
+        }
+        const emailBtn = document.getElementById('send-email');
+        if (emailBtn) {
+            emailBtn.addEventListener('click', function() {
+                // Send via backend first to ensure delivery, then open user's email client
+                sendEmailViaFormBackend();
+                openEmail();
+            });
+        }
+
         // Form submission handling
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert('Thank you for your message! We will get back to you soon.');
-                this.reset();
+                // Fire-and-forget email to your inbox via backend
+                sendEmailViaFormBackend();
+                openWhatsApp();
+                openSMS();
+                openEmail();
+                alert('We sent your message to our email and opened WhatsApp, your SMS app, and your email client with your message prefilled.');
             });
         }
 
